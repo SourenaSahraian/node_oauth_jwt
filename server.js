@@ -64,11 +64,10 @@ app.post('/login', (req, res) => {
     res.json({ accessToken , refreshToken})
 })
 
-app.post('/refreshToken', (req,res) => {
-
-    const refreshToken = req.body.refreshToken
-    if( !refreshToken || !validRefreshTokens.includes(refreshToken))  return res.sendStatus(HttpStatus.UNAUTHORIZED)
-    jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET_KEY, (err,user) => {
+app.get('/refreshToken/:token', (req,res) => {
+    const token = req.params.token
+    if( !token || !validRefreshTokens.includes(token))  return res.sendStatus(HttpStatus.UNAUTHORIZED)
+    jwt.verify(token,process.env.REFRESH_TOKEN_SECRET_KEY, (err,user) => {
         if(err) return res.sendStatus(UNAUTHORIZED.FORBIDDEN);
         return res.json(generateAccessToken(user))
 
