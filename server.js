@@ -69,7 +69,8 @@ app.get('/refreshToken/:token', (req,res) => {
     if( !token || !validRefreshTokens.includes(token))  return res.sendStatus(HttpStatus.UNAUTHORIZED)
     jwt.verify(token,process.env.REFRESH_TOKEN_SECRET_KEY, (err,user) => {
         if(err) return res.sendStatus(UNAUTHORIZED.FORBIDDEN);
-        return res.json(generateAccessToken(user))
+        const {userName,dob} = user; //the user has the issued data and additional info
+        return res.json(generateAccessToken({userName, dob}))
 
     })
 
